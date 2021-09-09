@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
+import android.util.Log.ASSERT
 import android.widget.Button
 import android.widget.Chronometer
 
@@ -59,21 +60,21 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "onResume: ")
+        Log.e(TAG, "onResume: ")
     }
 
     override fun onPause() {
         super.onPause()
-        Log.d(TAG, "onPause: ")
+        Log.i(TAG, "onPause: ")
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d(TAG, "onStop: ")
+        Log.v(TAG, "onStop: ")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(TAG, "onDestroy: ")
+        Log.w(TAG, "onDestroy: ")
     }
 }
