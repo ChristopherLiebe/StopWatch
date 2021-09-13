@@ -1,5 +1,6 @@
 package com.example.stopwatch
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
@@ -30,12 +31,14 @@ class MainActivity : AppCompatActivity() {
         buttonStart.setOnClickListener() {
             if(buttonStart.text == "Start") {
                 buttonStart.text = "Stop"
+                buttonStart.setBackgroundColor(Color.RED)
                 stopWatch.setBase(SystemClock.elapsedRealtime() + timeWhenStopped)
                 stopWatch.start()
 
             }
             else {
                 buttonStart.text = "Start"
+                buttonStart.setBackgroundColor(Color.argb(255,139, 195, 74))
                 timeWhenStopped = (stopWatch.getBase() - SystemClock.elapsedRealtime())
                 stopWatch.stop()
             }
