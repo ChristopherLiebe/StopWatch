@@ -14,12 +14,15 @@ class MainActivity : AppCompatActivity() {
     lateinit var buttonReset : Button
     lateinit var stopWatch : Chronometer
 
+    var isRunning = false
     var timeWhenStopped = 0L
 
     // making a classwide stating constant in Kotlin
     companion object {
         // all your "static" constants go here
         val TAG = "MainActivity"
+        val BUNDLE_DISPLAYED_TIME = "Displayed Time"
+        val RUNNING = "Is Running"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,18 +31,32 @@ class MainActivity : AppCompatActivity() {
 
         wireWidgets()
 
+        timeWhenStopped = savedInstanceState?.getLong(BUNDLE_DISPLAYED_TIME) ?: 0L
+        stopWatch.setBase(SystemClock.elapsedRealtime() + timeWhenStopped)
+        isRunning = savedInstanceState?.getBoolean(RUNNING) ?: false
+
+        if(isRunning) {
+            buttonStart.text = "Stop"
+            buttonStart.setBackgroundColor(Color.RED)
+            stopWatch.setBase(SystemClock.elapsedRealtime() + timeWhenStopped)
+            isRunning = true
+            stopWatch.start()
+        }
+
         buttonStart.setOnClickListener() {
-            if(buttonStart.text == "Start") {
+            if(!isRunning) {
                 buttonStart.text = "Stop"
                 buttonStart.setBackgroundColor(Color.RED)
                 stopWatch.setBase(SystemClock.elapsedRealtime() + timeWhenStopped)
+                isRunning = true
                 stopWatch.start()
 
             }
             else {
                 buttonStart.text = "Start"
                 buttonStart.setBackgroundColor(Color.argb(255,139, 195, 74))
-                timeWhenStopped = (stopWatch.getBase() - SystemClock.elapsedRealtime())
+                updateDisplayedTime()
+                isRunning = false
                 stopWatch.stop()
             }
         }
@@ -55,6 +72,20 @@ class MainActivity : AppCompatActivity() {
         buttonReset = findViewById(R.id.buttonReset)
         stopWatch = findViewById(R.id.chronometer_main_stopwatch)
     }
+
+    fun updateDisplayedTime() {
+        if(isRunning) {
+            timeWhenStopped = (stopWatch.getBase() - SystemClock.elapsedRealtime())
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        updateDisplayedTime()
+        outState.putLong("Displayed Time", timeWhenStopped)
+        outState.putBoolean("Is Running", isRunning)
+    }
+
 
     override fun onStart() {
         super.onStart()
